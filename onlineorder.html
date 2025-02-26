@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Your Candle</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="order-page-container">
+        <div class="order-form-container">
+            <h2>Order Your Candle</h2>
+            <p id="product-info"></p>
+
+            <form class="order-form-section">
+                <label class="order-form-label" for="name">Your Name:</label>
+                <input class="order-input" type="text" id="name" required>
+
+                <label class="order-form-label" for="email">Your Email:</label>
+                <input class="order-input" type="email" id="email" required>
+
+                <label class="order-form-label" for="address">Shipping Address:</label>
+                <input class="order-input" type="text" id="address" required>
+
+                <label class="order-form-label" for="quantity">Quantity:</label>
+                <input class="order-input" type="number" id="quantity" min="1" value="1" required>
+
+                <button class="order-submit-btn" type="submit">Place Order</button>
+            </form>
+        </div>
+
+        
+         <div class="image-container">
+             <img id="candle-image" src="" alt="Product Image">
+                <h3 id="candle-name">Ordering: Loading...</h3>
+                <p id="price-display">Price: $0</p>
+                <p id="tax-display">Tax (15%): $0</p>
+                 <p id="total-display">Total Price: $0</p>
+    
+    </div>
+    </div>
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                function getQueryParam(param) {
+                    const urlParams = new URLSearchParams(window.location.search);
+                    return urlParams.get(param);
+                }
+            
+                console.log("Script loaded");
+                console.log("URL Parameters:", window.location.search);
+            
+                const candleName = getQueryParam('name');
+                const candlePrice = parseFloat(getQueryParam('price')) || 0;
+                const candleImage = getQueryParam('image');
+            
+                console.log("Candle Name:", candleName);
+                console.log("Candle Price:", candlePrice);
+                console.log("Candle Image:", candleImage);
+            
+                
+                const candleNameElement = document.getElementById("candle-name");
+                const candleImageElement = document.getElementById("candle-image");
+                const priceDisplay = document.getElementById("price-display");
+                const taxDisplay = document.getElementById("tax-display");
+                const totalDisplay = document.getElementById("total-display");
+                const quantityInput = document.getElementById("quantity");
+            
+                console.log("Quantity Input Element:", quantityInput);
+            
+                if (!candleNameElement || !candleImageElement || !priceDisplay || !taxDisplay || !totalDisplay || !quantityInput) {
+                    console.error("One or more required elements are missing from the DOM.");
+                    return;
+                }
+            
+                if (candleName && !isNaN(candlePrice) && candleImage) {
+                    candleNameElement.innerText = `Ordering: ${candleName}`;
+                    candleImageElement.src = candleImage;
+                    candleImageElement.alt = candleName;
+            
+                    function updatePrice() {
+                        let quantity = parseInt(quantityInput.value) || 1;
+                        let total = quantity * candlePrice;
+                        let tax = total * 0.15;
+                        let totalWithTax = total + tax;
+            
+                        priceDisplay.innerText = `Price: $${total.toFixed(2)}`;
+                        taxDisplay.innerText = `Tax (15%): $${tax.toFixed(2)}`;
+                        totalDisplay.innerText = `Total Price: $${totalWithTax.toFixed(2)}`;
+                    }
+            
+                    if (quantityInput) {
+                        quantityInput.addEventListener("input", updatePrice);
+                    } else {
+                        console.error("Quantity input field is missing.");
+                    }
+                    
+                    updatePrice();
+                } else {
+                    candleNameElement.innerText = "Ordering: Unknown Candle";
+                    candleImageElement.src = "placeholder.jpg"; 
+                }
+            });
+        </script>
+        <script src="script.js"></script>
+
+    </body>
+    </html>
+    
+</body>
+</html>
